@@ -61,7 +61,7 @@ class scRNATimeSeriesDataset(Dataset):
         self.timepoint_order = timepoint_order
         if self.timepoint_order is None:
             self.timepoint_order = np.unique(self.timepoint)  # sorts
-        assert np.in1d(self.timepoint, self.timepoint_order).all()
+        assert np.isin(self.timepoint, self.timepoint_order).all()
         self.n_timepoints = len(self.timepoint_order)
 
         self.batch_size = batch_size
@@ -201,14 +201,14 @@ def remove_bad_rows_columns(
     n_celltypes = adata.obs[celltype].unique().size
     print(f"Removing {len(to_remove)} low count cell types")
     print(f"Using {n_celltypes - len(to_remove)} cell types")
-    cell_mask = ~np.in1d(adata.obs[celltype], to_remove)
+    cell_mask = ~np.isin(adata.obs[celltype], to_remove)
     cell_mask[pd.isna(adata.obs[celltype])] = False
 
     adata._inplace_subset_obs(cell_mask)
 
     to_keep = np.ones(adata.shape[1], dtype=bool)
     if res_genes is not None:
-        to_keep[~np.in1d(adata.var_names, res_genes)] = False
+        to_keep[~np.isin(adata.var_names, res_genes)] = False
 
     # Remove genes which are zero everywhere for any timepoint
     for tp in adata.obs[timepoint].unique():
@@ -238,8 +238,8 @@ def load_trrust(
     adata.var_names = np.char.upper(adata.var_names.to_numpy().astype(str))
 
     # Keep only links where both the TF and target can be found in adata
-    trrust = trrust[(np.in1d(trrust[0], adata.var_names))
-                    & (np.in1d(trrust[1], adata.var_names))]
+    trrust = trrust[(np.isin(trrust[0], adata.var_names))
+                    & (np.isin(trrust[1], adata.var_names))]
     trrust_links = list(set(zip(trrust[0], trrust[1])))
 
     all_unq_trrust_genes = pd.unique(trrust[[0, 1]].values.ravel('K'))
@@ -247,7 +247,7 @@ def load_trrust(
     print(f"Found {len(common_genes)} genes in common.")
     if index_adata:
         adata._inplace_subset_var(common_genes)
-        adata.var['is_TF'] = np.in1d(adata.var_names, trrust[0].unique())
+        adata.var['is_TF'] = np.isin(adata.var_names, trrust[0].unique())
         print(f"Using {adata.var['is_TF'].sum()} TFs")
     return trrust_links
 
@@ -280,8 +280,8 @@ def load_regnetwork(
         else adata.var_names[adata.var['is_TF']]
     )
     regnetwork = regnetwork[
-        (np.in1d(regnetwork[0], tf_names))
-        & (np.in1d(regnetwork[2], adata.var_names))
+        (np.isin(regnetwork[0], tf_names))
+        & (np.isin(regnetwork[2], adata.var_names))
     ]
 
     regnetwork_links = list(set(zip(regnetwork[0], regnetwork[2])))
@@ -291,6 +291,6 @@ def load_regnetwork(
     print(f"Found {len(common_genes)} genes in common.")
     if index_adata:
         adata._inplace_subset_var(common_genes)
-        adata.var['is_TF'] = np.in1d(adata.var_names, regnetwork[0].unique())
+        adata.var['is_TF'] = np.isin(adata.var_names, regnetwork[0].unique())
         print(f"Using {adata.var['is_TF'].sum()} TFs")
     return regnetwork_links

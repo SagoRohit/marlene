@@ -35,6 +35,6 @@ npc = np.concatenate
 npu = np.unique
 npurc = partial(np.unique, return_counts=True)
 npd = np.setdiff1d
-npin = np.in1d
+npin = np.isin
 
 r5 = anndata.read_h5ad

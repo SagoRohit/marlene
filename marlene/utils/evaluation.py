@@ -46,5 +46,5 @@ def score(
     df = pd.DataFrame(results)
     qvals = multipletests(df['p-val'].to_numpy(), method='fdr_bh')[1]
     df['FDR'] = qvals
-    df['$-\log_{10}(FDR)$'] = -np.log10(df['FDR'])  # noqa
+    df[r'$-\log_{10}(FDR)$'] = -np.log10(df['FDR'])
     return df
