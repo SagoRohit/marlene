@@ -1,5 +1,5 @@
 numpy
-pytorch
+torch
 scipy
 tqdm
 wandb
@@ -8,3 +8,4 @@ pandas
 anndata
 scanpy
 gseapy
+statsmodels

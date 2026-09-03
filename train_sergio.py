@@ -38,10 +38,12 @@ from sklearn.metrics import average_precision_score, roc_auc_score
 from torch.optim import Adam
 from tqdm.auto import tqdm
 
-# numpy>=2.0 removed np.in1d (marlene/datasets.py still calls it). This
-# shim keeps datasets.py completely unmodified on disk -- np.isin is a
-# drop-in, functionally identical replacement available in all numpy
-# versions, so this is a compatibility fix, not a behavior change.
+# numpy>=2.0 removed np.in1d. marlene/datasets.py itself only calls
+# np.isin (already numpy>=2.0-safe), but this shim guards against older
+# transitive dependencies (pandas/scikit-learn/anndata versions) that may
+# still call the removed alias internally. np.isin is a drop-in,
+# functionally identical replacement, so this is a compatibility fix, not
+# a behavior change.
 if not hasattr(np, "in1d"):
     np.in1d = np.isin
 
@@ -154,7 +156,16 @@ def main():
         device=device,
     )
     print(f"n_timepoints={dataset.n_timepoints}, n_classes={dataset.n_classes} "
-          f"(single synthetic cell type by design, see sergio_prepare_data.py)")
+          f"(pseudo cell-type = SERGIO replicate id, see sergio_prepare_data.py)")
+    if dataset.n_classes < 2:
+        raise ValueError(
+            f"n_classes={dataset.n_classes}, but Marlene's MAML loop is "
+            "trained entirely through a cell-type classification loss: "
+            "with a single class, cross_entropy is identically 0 everywhere "
+            "(softmax over one logit is always 1.0), so gradients are "
+            "exactly zero and no training happens. Regenerate the h5ad "
+            "with `sergio_prepare_data.py --n_replicates >=2`."
+        )
 
     model = Marlene(
         n_genes=dataset.n_genes,
