@@ -16,13 +16,19 @@ REWRITTEN for this project (not present in the original repo):
     - AUPRC/AUROC evaluation: the proposal (Section 5.7) requires AUPRC as
       the primary metric; the original repo only reported hypergeometric
       p-values, so this is added on top, not a replacement
+    - Optional Weights & Biases logging: mirrors train.py's use of
+      wandb.init/wandb.watch/wandb.log for the training curve, plus the
+      mid-train AUPRC probe and the final AUPRC/AUROC-per-timepoint eval
+      curve. wandb is imported lazily (only if --use_wandb is passed) so
+      this script has no hard dependency on it.
 
 USAGE
 -----
 python train_sergio.py \
     --data_dir /kaggle/working/Marlene/data \
     --runid marlene_sergio_dense \
-    --n_epochs 500 --device cuda
+    --n_epochs 500 --device cuda \
+    --use_wandb --wandb_project Marlene-SERGIO
 """
 import argparse
 import copy
@@ -138,7 +144,14 @@ def main():
     ap.add_argument("--n_seeds", type=int, default=16)
     ap.add_argument("--frac_top_edges", type=float, default=0.02)
     ap.add_argument("--n_draws", type=int, default=50)
+    ap.add_argument("--use_wandb", action="store_true",
+                     help="Log training curve + eval metrics to Weights & Biases")
+    ap.add_argument("--wandb_project", type=str, default="Marlene-SERGIO")
+    ap.add_argument("--wandb_entity", type=str, default=None)
     args = ap.parse_args()
+
+    if args.use_wandb:
+        import wandb
 
     data_dir = Path(args.data_dir)
     device = args.device if torch.cuda.is_available() else "cpu"
@@ -179,6 +192,11 @@ def main():
     if device == "cuda":
         model.cuda()
 
+    if args.use_wandb:
+        wandb.init(project=args.wandb_project, entity=args.wandb_entity,
+                   name=args.runid, config=vars(args))
+        wandb.watch(model, log="all", log_freq=100)
+
     meta_optimizer = Adam(model.parameters(), lr=args.lr)
     meta = Meta(
         model, meta_optimizer,
@@ -204,6 +222,12 @@ def main():
                 if device == "cuda":
                     model.cuda()
             bar.set_description(f"epoch={epoch}, loss={epoch_loss:.4g}, acc={epoch_acc:.3g}")
+            if args.use_wandb:
+                wandb.log({
+                    "loss": epoch_loss,
+                    "accuracy": epoch_acc,
+                    "lr": meta_optimizer.param_groups[0]["lr"],
+                }, step=epoch)
 
             if epoch > 0 and epoch % 50 == 0:
                 model.eval()
@@ -216,6 +240,8 @@ def main():
                 mean_auprc_mid = np.nanmean([a[0] for a in aucs])
                 print(f"    [mid-train check] epoch={epoch} celltype={ct0} "
                       f"mean_auprc={mean_auprc_mid:.4f} (baseline=0.078)")
+                if args.use_wandb:
+                    wandb.log({"midtrain/auprc": mean_auprc_mid}, step=epoch)
                 model.train()
                 if device == "cuda":
                     model.cuda()
@@ -227,6 +253,7 @@ def main():
     targets = adata.var_names.to_numpy()
 
     y_pred_seq, auprc_per_t, auroc_per_t = {}, [], []
+    eval_rows = []
     for celltype in dataset.unq_celltype:
         preds = predict_celltype(
             adata, celltype, dataset, best_model,
@@ -239,17 +266,32 @@ def main():
             auprc, auroc = compute_auprc_auroc(p["A_full"], tfs, targets, gt_edges)
             auprc_per_t.append(auprc)
             auroc_per_t.append(auroc)
+            eval_rows.append([celltype, t, auprc, auroc])
             print(f"  celltype={celltype} t={t}: AUPRC={auprc:.4f} AUROC={auroc:.4f}")
 
-    print(f"\nMean AUPRC across timepoints: {np.nanmean(auprc_per_t):.4f}")
-    print(f"Mean AUROC across timepoints: {np.nanmean(auroc_per_t):.4f}")
+    mean_auprc, mean_auroc = np.nanmean(auprc_per_t), np.nanmean(auroc_per_t)
+    print(f"\nMean AUPRC across timepoints: {mean_auprc:.4f}")
+    print(f"Mean AUROC across timepoints: {mean_auroc:.4f}")
 
     # original hypergeometric-overlap metric, kept for continuity with the
     # authors' own reported statistic
     n_total_links = data_dict["n_total_links"]
     scores_df = score(y_pred_seq, gt_edges, n_total_links=n_total_links)
-    print("Mean significant (p<0.05):", (scores_df["p-val"] < 0.05).mean())
-    print("Mean overlap:", scores_df["N. overlap"].mean())
+    mean_significant = (scores_df["p-val"] < 0.05).mean()
+    mean_overlap = scores_df["N. overlap"].mean()
+    print("Mean significant (p<0.05):", mean_significant)
+    print("Mean overlap:", mean_overlap)
+
+    if args.use_wandb:
+        wandb.log({
+            "eval/auprc_auroc_per_timepoint": wandb.Table(
+                columns=["cell_type", "t", "auprc", "auroc"], data=eval_rows,
+            ),
+        })
+        wandb.summary["mean_auprc"] = mean_auprc
+        wandb.summary["mean_auroc"] = mean_auroc
+        wandb.summary["mean_significant"] = mean_significant
+        wandb.summary["mean_overlap"] = mean_overlap
 
     out_dir = Path("Marlene_results") / "SERGIO" / args.runid
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -263,6 +305,9 @@ def main():
             "n_timepoints": dataset.n_timepoints,
         }, f, indent=2)
     print(f"\nSaved checkpoint + metrics to {out_dir}")
+
+    if args.use_wandb:
+        wandb.finish()
 
 
 if __name__ == "__main__":
