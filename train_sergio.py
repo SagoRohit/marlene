@@ -164,7 +164,7 @@ def main():
     ap.add_argument("--update_step", type=int, default=5)
     ap.add_argument("--gradient_clip", type=float, default=0.1)
     ap.add_argument("--n_seeds", type=int, default=16)
-    ap.add_argument("--frac_top_edges", type=float, default=0.05)
+    ap.add_argument("--frac_top_edges", type=float, default=0.10)
     ap.add_argument("--n_draws", type=int, default=50)
     ap.add_argument("--use_wandb", action="store_true",
                      help="Log training curve + eval metrics to Weights & Biases")
