@@ -1,73 +1,138 @@
-epoch=50, loss=1.768, acc=1:  10%|█▎           | 50/500 [01:52<16:25,  2.19s/it]    [mid-train check] epoch=50 celltype=CT0 mean_auprc=0.0780 (baseline=0.078)
-epoch=100, loss=1.759, acc=1:  20%|██▏        | 100/500 [03:42<14:51,  2.23s/it]    [mid-train check] epoch=100 celltype=CT0 mean_auprc=0.0780 (baseline=0.078)
-epoch=150, loss=1.759, acc=1:  30%|███▎       | 150/500 [05:30<12:39,  2.17s/it]    [mid-train check] epoch=150 celltype=CT0 mean_auprc=0.0780 (baseline=0.078)
-epoch=200, loss=1.759, acc=1:  40%|████▍      | 200/500 [07:18<10:47,  2.16s/it]    [mid-train check] epoch=200 celltype=CT0 mean_auprc=0.0780 (baseline=0.078)
-epoch=250, loss=1.759, acc=1:  50%|█████▌     | 250/500 [09:07<09:16,  2.23s/it]    [mid-train check] epoch=250 celltype=CT0 mean_auprc=0.0780 (baseline=0.078)
-epoch=300, loss=1.759, acc=1:  60%|██████▌    | 300/500 [10:55<07:23,  2.22s/it]    [mid-train check] epoch=300 celltype=CT0 mean_auprc=0.0780 (baseline=0.078)
-epoch=350, loss=1.759, acc=1:  70%|███████▋   | 350/500 [12:43<05:28,  2.19s/it]    [mid-train check] epoch=350 celltype=CT0 mean_auprc=0.0780 (baseline=0.078)
-epoch=400, loss=1.759, acc=1:  80%|████████▊  | 400/500 [14:33<03:37,  2.18s/it]    [mid-train check] epoch=400 celltype=CT0 mean_auprc=0.0780 (baseline=0.078)
-epoch=450, loss=1.759, acc=1:  90%|█████████▉ | 450/500 [16:21<01:47,  2.15s/it]    [mid-train check] epoch=450 celltype=CT0 mean_auprc=0.0780 (baseline=0.078)
-epoch=499, loss=1.759, acc=1: 100%|███████████| 500/500 [18:08<00:00,  2.18s/it]
-    [DEBUG] A_seq stats: mean=0.000000 std=0.000000 min=0.000000 max=0.000000
-  celltype=CT0 t=0: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT0 t=1: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT0 t=2: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT0 t=3: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT0 t=4: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT0 t=5: AUPRC=0.0780 AUROC=0.5000
-    [DEBUG] A_seq stats: mean=0.000000 std=0.000000 min=0.000000 max=0.000000
-  celltype=CT1 t=0: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT1 t=1: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT1 t=2: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT1 t=3: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT1 t=4: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT1 t=5: AUPRC=0.0780 AUROC=0.5000
-    [DEBUG] A_seq stats: mean=0.000000 std=0.000000 min=0.000000 max=0.000000
-  celltype=CT2 t=0: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT2 t=1: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT2 t=2: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT2 t=3: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT2 t=4: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT2 t=5: AUPRC=0.0780 AUROC=0.5000
-    [DEBUG] A_seq stats: mean=0.000000 std=0.000000 min=0.000000 max=0.000000
-  celltype=CT3 t=0: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT3 t=1: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT3 t=2: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT3 t=3: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT3 t=4: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT3 t=5: AUPRC=0.0780 AUROC=0.5000
-    [DEBUG] A_seq stats: mean=0.000000 std=0.000000 min=0.000000 max=0.000000
-  celltype=CT4 t=0: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT4 t=1: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT4 t=2: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT4 t=3: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT4 t=4: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT4 t=5: AUPRC=0.0780 AUROC=0.5000
-    [DEBUG] A_seq stats: mean=0.000000 std=0.000000 min=0.000000 max=0.000000
-  celltype=CT5 t=0: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT5 t=1: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT5 t=2: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT5 t=3: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT5 t=4: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT5 t=5: AUPRC=0.0780 AUROC=0.5000
-    [DEBUG] A_seq stats: mean=0.000000 std=0.000000 min=0.000000 max=0.000000
-  celltype=CT6 t=0: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT6 t=1: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT6 t=2: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT6 t=3: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT6 t=4: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT6 t=5: AUPRC=0.0780 AUROC=0.5000
-    [DEBUG] A_seq stats: mean=0.000000 std=0.000000 min=0.000000 max=0.000000
-  celltype=CT7 t=0: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT7 t=1: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT7 t=2: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT7 t=3: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT7 t=4: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT7 t=5: AUPRC=0.0780 AUROC=0.5000
-    [DEBUG] A_seq stats: mean=0.000000 std=0.000000 min=0.000000 max=0.000000
-  celltype=CT8 t=0: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT8 t=1: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT8 t=2: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT8 t=3: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT8 t=4: AUPRC=0.0780 AUROC=0.5000
-  celltype=CT8 t=5: AUPRC=0.0780 AUROC=0.5000
+Initializing run 'marlene_sergio_dense'
+(cells, genes) = (16200, 400)
+n_total_links = 14800
+n ground-truth edges = 1155
+n_timepoints=6, n_classes=9 (pseudo cell-type = SERGIO replicate id, see sergio_prepare_data.py)
+wandb: [wandb.login()] Loaded credentials for https://api.wandb.ai from /root/.netrc.
+wandb: Currently logged in as: sagorchanda-official (sagorchanda) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+wandb: ⢿ Waiting for wandb.init()...
+wandb: ⣻ Waiting for wandb.init()...
+wandb: ⣽ Waiting for wandb.init()...
+wandb: Tracking run with wandb version 0.26.1
+wandb: Run data is saved locally in /kaggle/working/marlene/wandb/run-20260904_025348-r2ztv59o
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run marlene_sergio_dense
+wandb: ⭐️ View project at https://wandb.ai/sagorchanda/Marlene-SERGIO
+wandb: 🚀 View run at https://wandb.ai/sagorchanda/Marlene-SERGIO/runs/r2ztv59o
+epoch=50, loss=0.1324, acc=1:  10%|█▏          | 50/500 [01:52<16:11,  2.16s/it]    [mid-train check] epoch=50 celltype=CT0 mean_auprc=0.0778 (baseline=0.078)
+epoch=100, loss=0.01075, acc=1:  20%|█▊       | 100/500 [03:39<14:16,  2.14s/it]    [mid-train check] epoch=100 celltype=CT0 mean_auprc=0.0777 (baseline=0.078)
+epoch=150, loss=0.005141, acc=1:  30%|██▍     | 150/500 [05:27<12:41,  2.17s/it]    [mid-train check] epoch=150 celltype=CT0 mean_auprc=0.0776 (baseline=0.078)
+epoch=200, loss=0.005361, acc=1:  40%|███▏    | 200/500 [07:16<10:59,  2.20s/it]    [mid-train check] epoch=200 celltype=CT0 mean_auprc=0.0776 (baseline=0.078)
+epoch=250, loss=0.002192, acc=1:  50%|████    | 250/500 [09:06<09:20,  2.24s/it]    [mid-train check] epoch=250 celltype=CT0 mean_auprc=0.0777 (baseline=0.078)
+epoch=300, loss=0.009635, acc=1:  60%|████▊   | 300/500 [10:56<07:17,  2.19s/it]    [mid-train check] epoch=300 celltype=CT0 mean_auprc=0.0776 (baseline=0.078)
+epoch=350, loss=0.01241, acc=1:  70%|██████▎  | 350/500 [12:47<05:35,  2.23s/it]    [mid-train check] epoch=350 celltype=CT0 mean_auprc=0.0776 (baseline=0.078)
+epoch=400, loss=0.001884, acc=1:  80%|██████▍ | 400/500 [14:37<03:38,  2.19s/it]    [mid-train check] epoch=400 celltype=CT0 mean_auprc=0.0776 (baseline=0.078)
+epoch=450, loss=0.001679, acc=1:  90%|███████▏| 450/500 [16:27<01:50,  2.21s/it]    [mid-train check] epoch=450 celltype=CT0 mean_auprc=0.0776 (baseline=0.078)
+epoch=499, loss=0.007411, acc=1: 100%|████████| 500/500 [18:16<00:00,  2.19s/it]
+    [DEBUG] A_seq stats: mean=0.003080 std=0.029663 min=0.000000 max=0.684420
+  celltype=CT0 t=0: AUPRC=0.0777 AUROC=0.4915
+  celltype=CT0 t=1: AUPRC=0.0771 AUROC=0.4939
+  celltype=CT0 t=2: AUPRC=0.0772 AUROC=0.4937
+  celltype=CT0 t=3: AUPRC=0.0773 AUROC=0.4919
+  celltype=CT0 t=4: AUPRC=0.0773 AUROC=0.4922
+  celltype=CT0 t=5: AUPRC=0.0774 AUROC=0.4934
+    [DEBUG] A_seq stats: mean=0.001931 std=0.019696 min=0.000000 max=0.630003
+  celltype=CT1 t=0: AUPRC=0.0775 AUROC=0.4934
+  celltype=CT1 t=1: AUPRC=0.0775 AUROC=0.4920
+  celltype=CT1 t=2: AUPRC=0.0776 AUROC=0.4921
+  celltype=CT1 t=3: AUPRC=0.0770 AUROC=0.4878
+  celltype=CT1 t=4: AUPRC=0.0768 AUROC=0.4865
+  celltype=CT1 t=5: AUPRC=0.0772 AUROC=0.4917
+    [DEBUG] A_seq stats: mean=0.003993 std=0.039030 min=0.000000 max=0.711058
+  celltype=CT2 t=0: AUPRC=0.0777 AUROC=0.4913
+  celltype=CT2 t=1: AUPRC=0.0773 AUROC=0.4934
+  celltype=CT2 t=2: AUPRC=0.0767 AUROC=0.4922
+  celltype=CT2 t=3: AUPRC=0.0774 AUROC=0.4899
+  celltype=CT2 t=4: AUPRC=0.0774 AUROC=0.4920
+  celltype=CT2 t=5: AUPRC=0.0774 AUROC=0.4917
+    [DEBUG] A_seq stats: mean=0.002370 std=0.025527 min=0.000000 max=0.720702
+  celltype=CT3 t=0: AUPRC=0.0778 AUROC=0.4906
+  celltype=CT3 t=1: AUPRC=0.0777 AUROC=0.4903
+  celltype=CT3 t=2: AUPRC=0.0777 AUROC=0.4918
+  celltype=CT3 t=3: AUPRC=0.0775 AUROC=0.4920
+  celltype=CT3 t=4: AUPRC=0.0767 AUROC=0.4941
+  celltype=CT3 t=5: AUPRC=0.0768 AUROC=0.4895
+    [DEBUG] A_seq stats: mean=0.005964 std=0.053455 min=0.000000 max=0.794859
+  celltype=CT4 t=0: AUPRC=0.0777 AUROC=0.4911
+  celltype=CT4 t=1: AUPRC=0.0770 AUROC=0.4950
+  celltype=CT4 t=2: AUPRC=0.0772 AUROC=0.4938
+  celltype=CT4 t=3: AUPRC=0.0772 AUROC=0.4926
+  celltype=CT4 t=4: AUPRC=0.0776 AUROC=0.4926
+  celltype=CT4 t=5: AUPRC=0.0776 AUROC=0.4924
+    [DEBUG] A_seq stats: mean=0.005405 std=0.050051 min=0.000000 max=0.805365
+  celltype=CT5 t=0: AUPRC=0.0778 AUROC=0.4898
+  celltype=CT5 t=1: AUPRC=0.0767 AUROC=0.4927
+  celltype=CT5 t=2: AUPRC=0.0771 AUROC=0.4924
+  celltype=CT5 t=3: AUPRC=0.0774 AUROC=0.4919
+  celltype=CT5 t=4: AUPRC=0.0774 AUROC=0.4919
+  celltype=CT5 t=5: AUPRC=0.0776 AUROC=0.4918
+    [DEBUG] A_seq stats: mean=0.002849 std=0.028075 min=0.000000 max=0.635698
+  celltype=CT6 t=0: AUPRC=0.0778 AUROC=0.4918
+  celltype=CT6 t=1: AUPRC=0.0775 AUROC=0.4912
+  celltype=CT6 t=2: AUPRC=0.0774 AUROC=0.4923
+  celltype=CT6 t=3: AUPRC=0.0773 AUROC=0.4918
+  celltype=CT6 t=4: AUPRC=0.0774 AUROC=0.4900
+  celltype=CT6 t=5: AUPRC=0.0774 AUROC=0.4902
+    [DEBUG] A_seq stats: mean=0.004124 std=0.040030 min=0.000000 max=0.740451
+  celltype=CT7 t=0: AUPRC=0.0778 AUROC=0.4919
+  celltype=CT7 t=1: AUPRC=0.0776 AUROC=0.4927
+  celltype=CT7 t=2: AUPRC=0.0766 AUROC=0.4922
+  celltype=CT7 t=3: AUPRC=0.0773 AUROC=0.4939
+  celltype=CT7 t=4: AUPRC=0.0774 AUROC=0.4923
+  celltype=CT7 t=5: AUPRC=0.0775 AUROC=0.4924
+    [DEBUG] A_seq stats: mean=0.001601 std=0.015457 min=0.000000 max=0.415033
+  celltype=CT8 t=0: AUPRC=0.0776 AUROC=0.4926
+  celltype=CT8 t=1: AUPRC=0.0775 AUROC=0.4922
+  celltype=CT8 t=2: AUPRC=0.0771 AUROC=0.4887
+  celltype=CT8 t=3: AUPRC=0.0771 AUROC=0.4930
+  celltype=CT8 t=4: AUPRC=0.0774 AUROC=0.4934
+  celltype=CT8 t=5: AUPRC=0.0775 AUROC=0.4940
+
+Mean AUPRC across timepoints: 0.0774
+Mean AUROC across timepoints: 0.4919
+Mean significant (p<0.05): 0.0
+Mean overlap: 10.203703703703704
+
+Saved checkpoint + metrics to Marlene_results/SERGIO/marlene_sergio_dense
+wandb: ⢿ uploading artifact run-r2ztv59o-evalauprc_auroc_per_timepoint--UmMqw...
+wandb: ⢿ updating run metadata (0.0s)
+wandb: ⣻ uploading artifact run-r2ztv59o-evalauprc_auroc_per_timepoint--UmMqw...
+wandb: ⣻ updating run metadata (0.0s)
+wandb: ⣽ uploading artifact run-r2ztv59o-evalauprc_auroc_per_timepoint--UmMqw...
+wandb: ⣽ updating run metadata (0.0s)
+wandb: ⣾ uploading artifact run-r2ztv59o-evalauprc_auroc_per_timepoint--UmMqw...
+wandb: ⣾ updating run metadata (0.0s)
+wandb: ⣷ uploading artifact run-r2ztv59o-evalauprc_auroc_per_timepoint--UmMqw...
+wandb: ⣯ uploading artifact run-r2ztv59o-evalauprc_auroc_per_timepoint--UmMqw...
+wandb: ⣟ uploading artifact run-r2ztv59o-evalauprc_auroc_per_timepoint--UmMqw...
+wandb: ⡿ uploading artifact run-r2ztv59o-evalauprc_auroc_per_timepoint--UmMqw...
+wandb: ⢿ uploading artifact run-r2ztv59o-evalauprc_auroc_per_timepoint--UmMqw...
+wandb: ⣻ uploading artifact run-r2ztv59o-evalauprc_auroc_per_timepoint--UmMqw...
+wandb: ⣽ uploading artifact run-r2ztv59o-evalauprc_auroc_per_timepoint--UmMqw...
+wandb: ⣾ uploading artifact run-r2ztv59o-evalauprc_auroc_per_timepoint--UmMqw...
+wandb: ⣷ uploading artifact run-r2ztv59o-evalauprc_auroc_per_timepoint--UmMqw...
+wandb: ⣯ uploading artifact run-r2ztv59o-evalauprc_auroc_per_timepoint--UmMqw...
+wandb: ⣟ uploading history steps 498-499, summary, console lines 0-0 (0.1s)
+wandb: ⡿ uploading history steps 498-499, summary, console lines 0-0 (0.1s)
+wandb: ⢿ uploading history steps 498-499, summary, console lines 0-0 (0.1s)
+wandb: 
+wandb: Run history:
+wandb:       accuracy ▁███████████████████████████████████████
+wandb:           loss █▆▅▄▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb:             lr ▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁
+wandb: midtrain/auprc █▄▂▁▄▃▃▃▂
+wandb: 
+wandb: Run summary:
+wandb:         accuracy 1
+wandb:             loss 0.00741
+wandb:               lr 0.0001
+wandb:       mean_auprc 0.07735
+wandb:       mean_auroc 0.49192
+wandb:     mean_overlap 10.2037
+wandb: mean_significant 0
+wandb:   midtrain/auprc 0.07762
+wandb: 
+wandb: 🚀 View run marlene_sergio_dense at: https://wandb.ai/sagorchanda/Marlene-SERGIO/runs/r2ztv59o
+wandb: ⭐️ View project at: https://wandb.ai/sagorchanda/Marlene-SERGIO
+wandb: Synced 5 W&B file(s), 1 media file(s), 2 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20260904_025348-r2ztv59o/logs
