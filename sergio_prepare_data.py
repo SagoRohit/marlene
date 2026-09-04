@@ -47,6 +47,17 @@ repro) instead of learning real per-gene structure. This alone was NOT
 sufficient to fix the collapse -- see train_sergio.py's lr/inner_lr
 defaults for the other half of this fix.
 
+v5 CHANGE -- seeded timepoint subsampling (see --seed / main() for details)
+-----------------------------------------------------------------------------
+--n_timepoints_keep used to always pick the same evenly-spaced replicate
+indices regardless of seed, so repeated "seeds" of the same density tier
+would silently train on identical data. It now takes a random (seeded)
+subset of size --n_timepoints_keep out of --n_replicates, so seed=0/1/2
+of the same tier see genuinely different timepoints -- needed for the
+multi-seed robustness experiment (prompt_for_experiment.txt): prior sweeps
+showed Marlene's results are highly seed-dependent, so a single run per
+tier is not trustworthy evidence.
+
 OUTPUT
 ------
 - data/SERGIO-Marlene.h5ad
@@ -132,8 +143,20 @@ def main():
     )
     ap.add_argument(
         "--n_timepoints_keep", type=int, default=None,
-        help="If set, keep only this many EVENLY-SPACED replicate-"
-             "timepoints out of n_replicates (density-tier ablation).",
+        help="If set, keep only this many replicate-timepoints out of "
+             "n_replicates (density-tier ablation). Which ones are kept is "
+             "controlled by --seed (a random subset, not fixed evenly-"
+             "spaced positions) so that different seeds of the same tier "
+             "see genuinely different data.",
+    )
+    ap.add_argument(
+        "--seed", type=int, default=0,
+        help="Random seed controlling which replicate-timepoints "
+             "--n_timepoints_keep subsamples. Vary this across repeated "
+             "runs of the same tier for the multi-seed robustness "
+             "experiment (prior sweeps showed Marlene is highly "
+             "seed-dependent) -- otherwise every 'seed' of a tier would "
+             "silently reuse identical data.",
     )
     ap.add_argument(
         "--out_dir", type=str, default="/kaggle/working/Marlene/data",
@@ -158,14 +181,15 @@ def main():
     id_to_name = {gid: f"G{gid}" for gid in gene_ids}
 
     if args.n_timepoints_keep is not None:
-        keep_t = np.unique(np.linspace(
-            0, args.n_replicates - 1, args.n_timepoints_keep
-        ).round().astype(int))
+        k = min(args.n_timepoints_keep, args.n_replicates)
+        rng = np.random.RandomState(args.seed)
+        keep_t = np.sort(rng.choice(args.n_replicates, size=k, replace=False))
         mask = np.isin(timepoint, keep_t)
         X, cell_type, timepoint = X[mask], cell_type[mask], timepoint[mask]
         remap = {old: new for new, old in enumerate(sorted(keep_t))}
         timepoint = np.array([remap[t] for t in timepoint])
-        print(f"Subsampled to {len(keep_t)} timepoints (replicates {sorted(keep_t)})")
+        print(f"Subsampled to {len(keep_t)} timepoints (seed={args.seed}, "
+              f"replicates {sorted(keep_t)})")
 
     regulators = set(r for r, _ in gt_edges)
     is_tf = np.array([gid in regulators for gid in gene_ids])

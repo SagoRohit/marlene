@@ -36,6 +36,14 @@ FIX -- --lr / --inner_lr defaults (see main()'s argparse for details)
     bit-for-bit for hundreds of epochs, attention output exactly zero).
     Matching the original, validated learning rates fixes this.
 
+FIX -- --seed (see main()'s argparse for details)
+    Added torch.manual_seed/np.random.seed at the top of main(), driven by
+    a new --seed flag. Previously nothing seeded the run, so weight init
+    and batch sampling were uncontrolled -- fine for a single ad hoc run,
+    but the multi-seed robustness experiment (prompt_for_experiment.txt)
+    needs each seed to be both reproducible and genuinely different from
+    the others.
+
 USAGE
 -----
 python train_sergio.py \
@@ -170,7 +178,16 @@ def main():
                      help="Log training curve + eval metrics to Weights & Biases")
     ap.add_argument("--wandb_project", type=str, default="Marlene-SERGIO")
     ap.add_argument("--wandb_entity", type=str, default=None)
+    ap.add_argument("--seed", type=int, default=0,
+                     help="Random seed (torch + numpy) for reproducibility. "
+                          "Prior sweeps showed Marlene's results are highly "
+                          "seed-dependent -- vary this across repeated runs "
+                          "for the multi-seed robustness experiment rather "
+                          "than trusting a single run.")
     args = ap.parse_args()
+
+    torch.manual_seed(args.seed)
+    np.random.seed(args.seed)
 
     if args.use_wandb:
         import wandb

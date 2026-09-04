@@ -1,0 +1,146 @@
+CONTEXT
+I'm running the temporal-density sparsity experiment for my Marlene GRN-inference
+benchmark, described in Section 5.5 (Controlled variable: temporal density) and
+Section 5.7 (Evaluation metrics) of the research proposal you've already read.
+
+I already have two working, tested scripts in my Marlene/ repo root:
+- sergio_prepare_data.py: converts a SERGIO bundled dataset into an AnnData file.
+  Relevant flags: --dataset_dir, --n_bins (9, = number of genuinely distinct
+  SERGIO-simulated cell types, used as cell_type), --n_replicates (how many of
+  SERGIO's 15 pre-simulated replicate runs to load, used as timepoint -- these
+  are noise-resampled snapshots of the same population, not real biological
+  time; this is a documented simplification), --n_timepoints_keep (subsamples
+  down to N evenly-spaced timepoints out of what was loaded -- this is the
+  density-tier control), --out_dir.
+- train_sergio.py: trains Marlene (frozen architecture, unmodified) on the
+  resulting AnnData, evaluates AUPRC/AUROC per (cell_type, timepoint) against
+  the true SERGIO ground-truth edges, and saves
+  Marlene_results/SERGIO/<runid>/metrics.json containing mean_auprc, mean_auroc,
+  auprc_per_t, auroc_per_t, n_timepoints. Relevant flags: --data_dir, --runid,
+  --device, --n_epochs, --frac_top_edges (use 0.05 -- this was found to be the
+  best-performing sparsification threshold in prior hyperparameter sweeps on
+  this same 400-gene/37-TF dataset).
+
+KEY THING TO KNOW BEFORE YOU WRITE ANYTHING
+Prior experiments on this exact setup showed Marlene's results are highly
+seed-dependent -- a single training run is not trustworthy evidence. Any
+tier-level result MUST be reported as mean +/- std across multiple random
+seeds (use N_SEEDS=3 as the default, make it a config variable), not a single
+run. Preserve this rigor throughout.
+
+WHAT TO BUILD
+
+1. run_density_experiment.py -- an orchestration script that:
+   - Defines three temporal-density tiers per proposal Section 5.5:
+       Tier 1 (dense):       n_timepoints_keep=15  (all available replicates)
+       Tier 2 (sparse):      n_timepoints_keep=5
+       Tier 3 (ultra-sparse):n_timepoints_keep=3
+   - For each tier, for each of N_SEEDS=3 seeds:
+       a. Calls sergio_prepare_data.py with --n_bins 9 --n_replicates 15
+          --n_timepoints_keep <tier value> --out_dir data_tier<N>_seed<S>
+          (regenerate fresh each time so there's no stale-file risk; this
+          also naturally gives different random subsampling per seed if you
+          add a --seed flag to sergio_prepare_data.py that controls which
+          evenly-spaced replicates get kept, or at minimum vary it enough
+          to not silently reuse identical data across "different seeds")
+       b. Calls train_sergio.py with --data_dir data_tier<N>_seed<S>
+          --runid tier<N>_seed<S> --frac_top_edges 0.05 --device cuda
+          --n_epochs 500
+   - Logs progress clearly (which tier/seed is running, elapsed time) since
+     this is ~9 runs at ~18 min each (~2.7 hours total) on Kaggle, and the
+     script should be resumable -- skip any (tier, seed) combo whose
+     metrics.json already exists, so a Kaggle session timeout doesn't mean
+     starting over.
+   - Wrap each run in error handling so one failed run doesn't kill the
+     whole sweep; log failures clearly and continue.
+
+2. aggregate_density_results.py -- a script that:
+   - Walks Marlene_results/SERGIO/tier*_seed*/metrics.json for all 9 runs
+   - Computes, per tier: mean and std of mean_auprc and mean_auroc across
+     the 3 seeds, plus the random baseline for reference (edges / total_links
+     -- pull n_ground_truth_edges and n_total_links from the data or
+     hardcode from what we know: baseline AUPRC = 1155/14800 = 0.078,
+     baseline AUROC = 0.5)
+   - Writes a summary table to density_results_summary.csv with columns:
+     tier, n_timepoints, mean_auprc_mean, mean_auprc_std, mean_auroc_mean,
+     mean_auroc_std, n_seeds
+   - Also writes density_results_raw.csv with one row per individual run
+     (tier, seed, mean_auprc, mean_auroc) for full transparency/appendix use
+   - Generates a plot (matplotlib, save as density_degradation_curve.png):
+     x-axis = n_timepoints (or tier label), y-axis = mean_auprc (primary
+     metric per proposal 5.7) with error bars (std across seeds), a second
+     panel or overlaid line for mean_auroc, and a horizontal dashed
+     reference line at the random baseline for each metric. This is the
+     central figure for RQ1/RQ3 -- label it clearly (title, axis labels,
+     legend, tier annotations).
+   - Prints a short plain-text summary to console: for each tier, whether
+     mean_auprc/mean_auroc across seeds is meaningfully above baseline given
+     the std (don't just say "yes it's higher" -- note if std overlaps
+     baseline, i.e. don't overclaim, matching the same honest framing already
+     used for the frac_top_edges=0.05 finding: mean AUROC=0.506+/-0.025 was
+     NOT distinguishable from the 0.5 baseline given that variance).
+
+3. A brief density_experiment_notes.md summarizing: what was run, the
+   hyperparameters held fixed (frac_top_edges=0.05, n_epochs=500, same
+   400-gene/37-TF SERGIO dataset throughout), and pointing to the CSV/PNG
+   outputs -- something I can paste relevant bits of into the results
+   section of the paper.
+
+Please write these three files, test that run_density_experiment.py and
+aggregate_density_results.py at least import/parse correctly (I'll run the
+actual training on my Kaggle GPU), and tell me clearly what to run and in
+what order.
+
+
+
+
+FIGURE REQUIREMENTS -- MUST BE PUBLICATION-READY FOR DIRECT PAPER INCLUSION
+
+This figure is the central result for RQ1/RQ3 and will be inserted directly
+into the paper, not just used for internal review. Follow academic
+figure conventions:
+
+- Save in BOTH formats: a vector PDF (density_degradation_curve.pdf) for the
+  actual paper submission, and a PNG at 300 DPI
+  (density_degradation_curve.png) for quick preview/slides. Use
+  matplotlib's savefig(..., dpi=300, bbox_inches='tight') for the PNG and
+  savefig(..., format='pdf', bbox_inches='tight') for the PDF.
+- Figure size: ~6x4.5 inches (single-column) or ~7x5 inches if it needs to
+  span two columns -- reasonable for a journal/conference page, not a huge
+  presentation-sized figure.
+- Font sizes must be readable at print size when the figure is shrunk into a
+  paper column: axis labels >=11pt, tick labels >=9pt, legend >=9pt, title
+  >=12pt. Do not rely on matplotlib's tiny default sizes.
+- Use a clean, minimal style -- plt.style.use('seaborn-v0_8-whitegrid') or
+  equivalent, not the raw matplotlib default with heavy gridlines.
+- Colorblind-safe, high-contrast colors for the AUPRC and AUROC lines (e.g.
+  from a colorblind-safe palette like 'tab10' or explicit hex codes) --
+  don't rely on red/green alone. Use distinct markers (circle, square) in
+  addition to color so the lines are distinguishable in grayscale print too.
+- Error bars (std across seeds) must be clearly visible -- use capsize on
+  errorbar() so they don't look like flat lines.
+- X-axis should show actual number of timepoints per tier (not just "Tier
+  1/2/3") -- label ticks like "15 (Tier 1)", "5 (Tier 2)", "3 (Tier 3)" so
+  the reader gets both the density value and the tier name at a glance.
+- Baseline reference lines (random-chance AUPRC and AUROC) must be a
+  visually distinct dashed/dotted horizontal line in a neutral gray, with a
+  legend entry labeled "Random baseline", not just an unlabeled line.
+- Include a legend with a clear location that doesn't overlap the data
+  (loc='best' or explicitly positioned outside the plot if needed).
+- Axis labels must include units/meaning: x-axis "Number of Timepoints",
+  y-axis "Score (AUPRC / AUROC)" -- not just "x" and "y" or bare metric
+  names.
+- Title should be a full descriptive caption-style title, e.g. "Marlene
+  Performance Degradation Under Temporal Sparsity (SERGIO Synthetic Data)",
+  not just "Results".
+- No default matplotlib blue/orange unless deliberately chosen -- pick a
+  palette that looks intentional and consistent with typical ML paper
+  figures (muted, professional, not neon).
+- Double-check nothing gets clipped (long tick labels, legend, title) in
+  the saved output -- use bbox_inches='tight' as above and visually sanity
+  check the aspect ratio isn't distorted.
+
+If matplotlib is unavailable or produces a low-quality result, use seaborn
+on top of matplotlib for the styling rather than switching to a totally
+different plotting library -- I want this to stay a plain .py script I can
+re-run on Kaggle without extra unusual dependencies.
