@@ -34,6 +34,19 @@ THIS VERSION:
     explicitly in your methodology, same as the single-cell-type
     simplification in earlier versions.
 
+v4 CHANGE -- expression normalization (see main() for details)
+-----------------------------------------------------------------
+Raw SERGIO counts are now passed through scanpy's normalize_total +
+log1p before being written to the h5ad, matching how every real dataset
+Marlene was validated on (PBMC/HLCA) is preprocessed before training
+(see train.py's preprocess()). Without this, SERGIO bins' large
+basal-production-rate-driven differences in overall expression SCALE
+gave the classification pretext task a trivial shortcut, causing the
+attention output to collapse to exactly zero (confirmed via a controlled
+repro) instead of learning real per-gene structure. This alone was NOT
+sufficient to fix the collapse -- see train_sergio.py's lr/inner_lr
+defaults for the other half of this fix.
+
 OUTPUT
 ------
 - data/SERGIO-Marlene.h5ad
@@ -45,6 +58,7 @@ from pathlib import Path
 import anndata
 import numpy as np
 import pandas as pd
+import scanpy as sc
 
 
 def load_sergio_dataset(
@@ -168,6 +182,20 @@ def main():
         }),
         var=pd.DataFrame({"is_TF": is_tf}, index=gene_names),
     )
+
+    # v4 FIX -- see module docstring: SERGIO bins carry very different
+    # overall expression SCALE (different basal production rates per bin,
+    # by design). Marlene's classification loss only reaches the model
+    # through the attention-weighted reconstruction (x @ A.T), so feeding
+    # it raw, unnormalized counts lets the network solve the pretext task
+    # with a trivial "overall expression level" shortcut and never learn
+    # real per-gene attention -- confirmed: this collapsed attention to
+    # exactly zero everywhere (dead ReLU in the sparsification step) even
+    # after hundreds of epochs. Every real dataset Marlene was validated
+    # on (PBMC/HLCA) is normalized+log-transformed before Marlene sees it
+    # (see train.py's preprocess()); this restores that same parity here.
+    sc.pp.normalize_total(adata)
+    sc.pp.log1p(adata)
 
     h5ad_path = out_dir / "SERGIO-Marlene.h5ad"
     adata.write(h5ad_path)

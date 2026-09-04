@@ -22,6 +22,20 @@ REWRITTEN for this project (not present in the original repo):
       curve. wandb is imported lazily (only if --use_wandb is passed) so
       this script has no hard dependency on it.
 
+FIX -- --lr / --inner_lr defaults (see main()'s argparse for details)
+    Previously defaulted to lr=1e-3, inner_lr=1e-2 -- 10x higher than the
+    original, peer-reviewed real-data configs (configs/pbmc.ini,
+    configs/hlca.ini use lr=1e-4, inner_lr=1e-3). At the old, larger
+    inner_lr, MAML's few-shot inner loop could push just the classifier
+    head's bias term toward each episode's single label in a handful of
+    steps without the attention output carrying any information at all;
+    once attention hit exactly zero it passed through a ReLU in the
+    sparsification step (F.relu(attention - quantile)), which has zero
+    gradient at zero -- a dead-ReLU trap that permanently froze the
+    attention parameters (confirmed via a controlled repro: loss frozen
+    bit-for-bit for hundreds of epochs, attention output exactly zero).
+    Matching the original, validated learning rates fixes this.
+
 USAGE
 -----
 python train_sergio.py \
@@ -137,8 +151,16 @@ def main():
     ap.add_argument("--device", type=str, default="cuda")
     ap.add_argument("--n_epochs", type=int, default=500)
     ap.add_argument("--batch_size", type=int, default=16)
-    ap.add_argument("--lr", type=float, default=1e-3)
-    ap.add_argument("--inner_lr", type=float, default=1e-2)
+    ap.add_argument("--lr", type=float, default=1e-4,
+                     help="Outer (meta) learning rate. Matches configs/"
+                          "pbmc.ini / hlca.ini -- see module docstring FIX "
+                          "note for why the old 1e-3 default caused "
+                          "attention to collapse to exactly zero.")
+    ap.add_argument("--inner_lr", type=float, default=1e-3,
+                     help="MAML inner-loop learning rate. Matches configs/"
+                          "pbmc.ini / hlca.ini -- see module docstring FIX "
+                          "note for why the old 1e-2 default caused "
+                          "attention to collapse to exactly zero.")
     ap.add_argument("--update_step", type=int, default=5)
     ap.add_argument("--gradient_clip", type=float, default=0.1)
     ap.add_argument("--n_seeds", type=int, default=16)

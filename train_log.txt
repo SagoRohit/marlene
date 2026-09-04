@@ -1,0 +1,73 @@
+epoch=50, loss=1.768, acc=1:  10%|█▎           | 50/500 [01:52<16:25,  2.19s/it]    [mid-train check] epoch=50 celltype=CT0 mean_auprc=0.0780 (baseline=0.078)
+epoch=100, loss=1.759, acc=1:  20%|██▏        | 100/500 [03:42<14:51,  2.23s/it]    [mid-train check] epoch=100 celltype=CT0 mean_auprc=0.0780 (baseline=0.078)
+epoch=150, loss=1.759, acc=1:  30%|███▎       | 150/500 [05:30<12:39,  2.17s/it]    [mid-train check] epoch=150 celltype=CT0 mean_auprc=0.0780 (baseline=0.078)
+epoch=200, loss=1.759, acc=1:  40%|████▍      | 200/500 [07:18<10:47,  2.16s/it]    [mid-train check] epoch=200 celltype=CT0 mean_auprc=0.0780 (baseline=0.078)
+epoch=250, loss=1.759, acc=1:  50%|█████▌     | 250/500 [09:07<09:16,  2.23s/it]    [mid-train check] epoch=250 celltype=CT0 mean_auprc=0.0780 (baseline=0.078)
+epoch=300, loss=1.759, acc=1:  60%|██████▌    | 300/500 [10:55<07:23,  2.22s/it]    [mid-train check] epoch=300 celltype=CT0 mean_auprc=0.0780 (baseline=0.078)
+epoch=350, loss=1.759, acc=1:  70%|███████▋   | 350/500 [12:43<05:28,  2.19s/it]    [mid-train check] epoch=350 celltype=CT0 mean_auprc=0.0780 (baseline=0.078)
+epoch=400, loss=1.759, acc=1:  80%|████████▊  | 400/500 [14:33<03:37,  2.18s/it]    [mid-train check] epoch=400 celltype=CT0 mean_auprc=0.0780 (baseline=0.078)
+epoch=450, loss=1.759, acc=1:  90%|█████████▉ | 450/500 [16:21<01:47,  2.15s/it]    [mid-train check] epoch=450 celltype=CT0 mean_auprc=0.0780 (baseline=0.078)
+epoch=499, loss=1.759, acc=1: 100%|███████████| 500/500 [18:08<00:00,  2.18s/it]
+    [DEBUG] A_seq stats: mean=0.000000 std=0.000000 min=0.000000 max=0.000000
+  celltype=CT0 t=0: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT0 t=1: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT0 t=2: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT0 t=3: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT0 t=4: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT0 t=5: AUPRC=0.0780 AUROC=0.5000
+    [DEBUG] A_seq stats: mean=0.000000 std=0.000000 min=0.000000 max=0.000000
+  celltype=CT1 t=0: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT1 t=1: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT1 t=2: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT1 t=3: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT1 t=4: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT1 t=5: AUPRC=0.0780 AUROC=0.5000
+    [DEBUG] A_seq stats: mean=0.000000 std=0.000000 min=0.000000 max=0.000000
+  celltype=CT2 t=0: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT2 t=1: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT2 t=2: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT2 t=3: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT2 t=4: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT2 t=5: AUPRC=0.0780 AUROC=0.5000
+    [DEBUG] A_seq stats: mean=0.000000 std=0.000000 min=0.000000 max=0.000000
+  celltype=CT3 t=0: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT3 t=1: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT3 t=2: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT3 t=3: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT3 t=4: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT3 t=5: AUPRC=0.0780 AUROC=0.5000
+    [DEBUG] A_seq stats: mean=0.000000 std=0.000000 min=0.000000 max=0.000000
+  celltype=CT4 t=0: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT4 t=1: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT4 t=2: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT4 t=3: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT4 t=4: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT4 t=5: AUPRC=0.0780 AUROC=0.5000
+    [DEBUG] A_seq stats: mean=0.000000 std=0.000000 min=0.000000 max=0.000000
+  celltype=CT5 t=0: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT5 t=1: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT5 t=2: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT5 t=3: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT5 t=4: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT5 t=5: AUPRC=0.0780 AUROC=0.5000
+    [DEBUG] A_seq stats: mean=0.000000 std=0.000000 min=0.000000 max=0.000000
+  celltype=CT6 t=0: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT6 t=1: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT6 t=2: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT6 t=3: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT6 t=4: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT6 t=5: AUPRC=0.0780 AUROC=0.5000
+    [DEBUG] A_seq stats: mean=0.000000 std=0.000000 min=0.000000 max=0.000000
+  celltype=CT7 t=0: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT7 t=1: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT7 t=2: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT7 t=3: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT7 t=4: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT7 t=5: AUPRC=0.0780 AUROC=0.5000
+    [DEBUG] A_seq stats: mean=0.000000 std=0.000000 min=0.000000 max=0.000000
+  celltype=CT8 t=0: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT8 t=1: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT8 t=2: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT8 t=3: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT8 t=4: AUPRC=0.0780 AUROC=0.5000
+  celltype=CT8 t=5: AUPRC=0.0780 AUROC=0.5000
